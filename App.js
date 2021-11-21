@@ -1,12 +1,14 @@
-import React from 'react';
-import { Text, View }  from 'react-native';
+import React, {useState} from 'react';
+import { Button, Text, View }  from 'react-native';
 
 const Message = (props) => {
+  const [likeCounts, setLikeCounts] = useState(0);
   return (
     <View style={{ padding: 50 }}>
       <Text style={{ fontSize:30 }}>Hello {props.name}&nbsp; 
-      and my age is {props.age}
+        and my age is {props.age}. This is {likeCounts} times liked.
       </Text>
+      <Button title="Like" onPress={() => setLikeCounts(likeCounts+1)}/>
     </View>
       );
 }
