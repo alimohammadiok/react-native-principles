@@ -4,7 +4,7 @@ import { Text, View }  from 'react-native';
 const Message = (props) => {
   return (
     <View style={{ padding: 50 }}>
-      <Text style={{ fontSize:30 }}>Hello {props.name} 
+      <Text style={{ fontSize:30 }}>Hello {props.name}&nbsp; 
       and my age is {props.age}
       </Text>
     </View>
