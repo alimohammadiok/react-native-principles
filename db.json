@@ -1,0 +1,43 @@
+{
+  "messages": [
+    {
+      "id": 1,
+      "content": "java book",
+      "likeCount": 0
+    },
+    {
+      "id": 2,
+      "content": "Python book",
+      "likeCount": 0
+    },
+    {
+      "id": 3,
+      "content": "React Native book",
+      "likeCount": 0
+    },
+    {
+      "content": "Php book",
+      "id": 4
+    },
+    {
+      "content": "JavaScript book",
+      "id": 5
+    },
+    {
+      "content": "Test a new message",
+      "id": 6
+    },
+    {
+      "content": "Elixir programming",
+      "id": 7
+    },
+    {
+      "content": "C++ language",
+      "id": 8
+    },
+    {
+      "content": "Haskell language",
+      "id": 9
+    }
+  ]
+}
