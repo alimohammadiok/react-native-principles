@@ -1,71 +1,130 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Button,
-  Text,
-  View,
-  FlatList,
-  TextInput
-} from 'react-native';
+import { ActivityIndicator, Button, FlatList, Text, View, TextInput }  from 'react-native';
 
-const App = props => {
+export default App = () => {
   const [likeCounts, setLikeCounts] = useState(0);
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const onChangeHandler = val => {
-    setNewMessage(val);
-  };
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [newMessage, setNewmessage] = useState('');
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [updateMessageId, setUpdateMessageId] = useState(0);
+  const OnChangeHandler = (text)=> {
+    setNewmessage(text)
+  }
 
-  const getMessages = async () => {
+  const confirmUpdate = ()=> {
     try {
-      const response = await fetch('http://localhost:3000/messages');
-      const json = await response.json();
-      setMessages(json);
-    } catch (error) {
+      fetch('http://localhost:3000/messages/'+updateMessageId, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+       content: newMessage
+      })
+});
+
+getMessages();
+setIsUpdate(false);
+    }
+    catch(error) {
       console.log(error);
     }
-  };
+  }
 
-  const addNewMessage = async () => {
+  const updateMessage = (message)=> {
+    console.log(message);
+    setNewmessage(message.content);
+    setIsUpdate(true);
+    setUpdateMessageId(message.id)
+
+  }
+
+  const deleteMessage = (id)=> {
     try {
-      await fetch('http://localhost:3000/messages', {
-        method: 'POST',
+      fetch('http://localhost:3000/messages/'+id, {
+        method: 'DELETE',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          content: newMessage,
-          likeCounts: '0',
-        }),
-      });
-      getMessages();
-    } catch (error) {
+       
+  });
+
+    }
+    catch(error) {
+
+    }
+
+    getMessages();
+  }
+
+  const addNewMessage = () => {
+    try {
+      fetch('http://localhost:3000/messages', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+       content: newMessage
+      })
+});
+
+getMessages();
+
+    }
+    catch(error) {
       console.log(error);
     }
-  };
+  }
+
+  const getMessages = async () => {
+    try{
+      const response = await fetch('http://localhost:3000/messages');
+      const json = await response.json();
+      console.log(json);
+      setData(json);
+    }
+    catch (error){
+      console.error(error);
+    }
+    finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     getMessages();
   }, []);
 
   return (
-    <View style={{padding: 50}}>
-      <TextInput
-        style={{borderBottomWidth: 2, fontSize: 20}}
-        placeholder="Message"
-        onChangeText={onChangeHandler}
-      />
-      <Button title="Submit" onPress={() => addNewMessage()} />
-      <FlatList
-        data={messages}
-        renderItem={({item}) => (
-          <Text style={{fontSize: 20}}>
-            {item.id}, {item.content}
-          </Text>
-        )}
-      />
+    <View style={{ flex: 1, padding: 54 }}>
+      <TextInput 
+      placeholder= "Write your message here"
+      onChangeText = {OnChangeHandler}
+      value={newMessage} />
+      <Button
+      title={!isUpdate ? "Add Message": "Update Message" }
+      onPress={!isUpdate ? () => addNewMessage(): ()=>confirmUpdate()}/>
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <>
+            <Text style={{fontSize: 20}}>{item.id}, {item.content}
+            
+            </Text>
+            <View style={{flexDirection: "row", borderBottomWidth: 2}}>
+            <Button title="Delete" onPress={()=>deleteMessage(item.id)}/>
+            <Button title="Update" onPress={()=>updateMessage(item)}/>
+            </View>
+            </>
+          )}
+        />
     </View>
   );
+  
 };
-
-export default App;

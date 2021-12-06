@@ -1,14 +1,43 @@
 import React, {useEffect, useState} from 'react';
-import { ActivityIndicator, Button, FlatList, Text, View, TextInput }  from 'react-native';
+import { ActivityIndicator, Button, FlatList, Text, View, TextInput }  
+from 'react-native';
 
 export default App = () => {
   const [likeCounts, setLikeCounts] = useState(0);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [newMessage, setNewmessage] = useState('');
-
+  const [isUpdate, setIsUpdate ] = useState(false);
+  const [updateMessageId, setUpdateMessageId] = useState(0);
   const OnChangeHandler = (text)=> {
     setNewmessage(text)
+  }
+
+  const confirmUpdate = ()=> {
+    try {
+      fetch('http://localhost:3000/messages/'+updateMessageId, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+       content: newMessage
+      })
+});
+
+getMessages();
+
+    }
+    catch(error) {
+      console.log(error);
+    }
+  }
+
+  const updateMessage = (item) => {
+    setIsUpdate(true);
+    setNewmessage(item.content);
+    setUpdateMessageId(item.id);
   }
 
   const addNewMessage = () => {
@@ -55,15 +84,19 @@ getMessages();
     <View style={{ flex: 1, padding: 54 }}>
       <TextInput 
       placeholder= "Write your message here"
-      onChangeText = {OnChangeHandler} />
+      onChangeText = {OnChangeHandler}
+      value={newMessage} />
       <Button 
-      title="Add Message"
-      onPress={() => addNewMessage()}/>
+      title= {!isUpdate? "Add Message": "Update Message" }
+      onPress={!isUpdate? () => addNewMessage(): ()=> confirmUpdate()}/>
         <FlatList
           data={data}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
+            <View>
             <Text style={{fontSize: 20}}>{item.id}, {item.content}</Text>
+            <Button  title="Update" onPress={()=> updateMessage(item)}/>
+            </View>
           )}
         />
     </View>

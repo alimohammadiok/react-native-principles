@@ -1,14 +1,12 @@
 {
   "messages": [
     {
-      "id": 1,
       "content": "java book",
-      "likeCount": 0
+      "id": 1
     },
     {
-      "id": 2,
       "content": "Python book",
-      "likeCount": 0
+      "id": 2
     },
     {
       "id": 3,
@@ -16,7 +14,7 @@
       "likeCount": 0
     },
     {
-      "content": "Php book",
+      "content": "Php book updated",
       "id": 4
     },
     {
@@ -24,20 +22,12 @@
       "id": 5
     },
     {
-      "content": "Test a new message",
+      "content": "C++ programming lang",
       "id": 6
     },
     {
-      "content": "Elixir programming",
+      "content": "Elixir prog",
       "id": 7
-    },
-    {
-      "content": "C++ language",
-      "id": 8
-    },
-    {
-      "content": "Haskell language",
-      "id": 9
     }
   ]
 }
